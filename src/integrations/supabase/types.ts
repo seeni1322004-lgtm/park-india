@@ -14,16 +14,230 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          city: string
+          created_at: string
+          date: string
+          gst: number
+          hours: number
+          id: string
+          parking_area_id: string
+          parking_name: string
+          payment_status: string
+          qr_code: string | null
+          slot_id: string
+          slot_number: string
+          start_time: string
+          total_price: number
+          user_id: string
+          vehicle_type: string
+        }
+        Insert: {
+          city: string
+          created_at?: string
+          date: string
+          gst?: number
+          hours?: number
+          id?: string
+          parking_area_id: string
+          parking_name: string
+          payment_status?: string
+          qr_code?: string | null
+          slot_id: string
+          slot_number: string
+          start_time: string
+          total_price?: number
+          user_id: string
+          vehicle_type?: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          date?: string
+          gst?: number
+          hours?: number
+          id?: string
+          parking_area_id?: string
+          parking_name?: string
+          payment_status?: string
+          qr_code?: string | null
+          slot_id?: string
+          slot_number?: string
+          start_time?: string
+          total_price?: number
+          user_id?: string
+          vehicle_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_parking_area_id_fkey"
+            columns: ["parking_area_id"]
+            isOneToOne: false
+            referencedRelation: "parking_areas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_slot_id_fkey"
+            columns: ["slot_id"]
+            isOneToOne: false
+            referencedRelation: "parking_slots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parking_areas: {
+        Row: {
+          address: string
+          amenities: string[] | null
+          area: string
+          available_slots: number
+          city: string
+          created_at: string
+          id: string
+          image: string | null
+          lat: number | null
+          lng: number | null
+          name: string
+          price_per_hour: number
+          rating: number | null
+          total_slots: number
+          vehicle_types: string[] | null
+        }
+        Insert: {
+          address: string
+          amenities?: string[] | null
+          area: string
+          available_slots?: number
+          city: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          lat?: number | null
+          lng?: number | null
+          name: string
+          price_per_hour?: number
+          rating?: number | null
+          total_slots?: number
+          vehicle_types?: string[] | null
+        }
+        Update: {
+          address?: string
+          amenities?: string[] | null
+          area?: string
+          available_slots?: number
+          city?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          lat?: number | null
+          lng?: number | null
+          name?: string
+          price_per_hour?: number
+          rating?: number | null
+          total_slots?: number
+          vehicle_types?: string[] | null
+        }
+        Relationships: []
+      }
+      parking_slots: {
+        Row: {
+          created_at: string
+          id: string
+          parking_area_id: string
+          slot_number: string
+          status: string
+          vehicle_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parking_area_id: string
+          slot_number: string
+          status?: string
+          vehicle_type?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parking_area_id?: string
+          slot_number?: string
+          status?: string
+          vehicle_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parking_slots_parking_area_id_fkey"
+            columns: ["parking_area_id"]
+            isOneToOne: false
+            referencedRelation: "parking_areas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +364,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
